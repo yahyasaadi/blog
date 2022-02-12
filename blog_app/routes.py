@@ -14,3 +14,11 @@ def register():
     if form.validate_on_submit():
         return redirect(url_for('home'))
     return render_template('register.html', form=form, title='Register Form')
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        return redirect(url_for('home'))
+    return render_template('login.html', form=form, title='Login Form')
