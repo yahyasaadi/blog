@@ -8,8 +8,9 @@ from flask_login import current_user, login_user, logout_user, login_required
 # routes
 @app.route('/')
 def home():
+    posts = Post.query.all()
     title="Home"
-    return render_template('home.html', title=title)
+    return render_template('home.html', title=title, posts=posts)
 
 
 # The registration route
@@ -52,8 +53,19 @@ def logout():
 
 
 @app.route('/post/new', methods=['GET', 'POST'])
+@login_required
 def new_post():
     form = PostForm()
     if form.validate_on_submit():
+        post = Post(title=form.title.data, content=form.content.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your post has been created', 'success')
         return redirect(url_for('home'))
-    return render_template('new_post.html', form=form, title='New Post')
+    return render_template('new_post.html', form=form, title='New Post', legend='New Blog Post')
+
+
+@app.route('/post/<int:post_id>')
+def post(post_id):
+    post = Post.query.get_or_404(post_id)
+    return render_template('post.html', post=post)
