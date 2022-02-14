@@ -23,24 +23,27 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a href="{{ url_for('new_post') }}" class="nav-link">New Post</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url_for('login') }}" class="nav-link">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="{{ url_for('register') }}" class="nav-link">Register</a>
-                    </li>
+                  {% if current_user.is_authenticated %}
+                      <li class="nav-item">
+                          <a href="{{ url_for('new_post') }}" class="nav-link">New Post</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="{{ url_for('logout') }}" class="nav-link">Logout</a>
+                      </li>
+                  {% else %}
+                      <li class="nav-item">
+                          <a href="{{ url_for('login') }}" class="nav-link">Login</a>
+                      </li>
+                      <li class="nav-item">
+                          <a href="{{ url_for('register') }}" class="nav-link">Register</a>
+                      </li>
+                  {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
 
-    <main role="main" class="container">
+    <main role="main" class="container mt-3">
         <div class="row">
           <div class="col-md-8">
             {% with messages = get_flashed_messages(with_categories=true) %}
