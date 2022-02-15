@@ -1,6 +1,6 @@
 from flask import redirect, render_template, request, url_for, flash, abort
 from blog_app import app, db, bcrypt, login_manager
-from blog_app.forms import RegistrationForm, LoginForm, PostForm
+from blog_app.forms import RegistrationForm, LoginForm, PostForm, CommentForm
 from blog_app.models import User, Post, Comment
 from flask_login import current_user, login_user, logout_user, login_required
 
@@ -100,3 +100,16 @@ def delete_post(post_id):
     db.session.commit()
     flash('Post deleted successfully', 'info')
     return redirect(url_for('home'))
+
+
+@app.route('/post/<int:post_id>/comment', methods=['GET', 'POST'])
+@login_required
+def post_comment(post_id):
+    post = Post.query.get_or_404(post_id)
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment = Comment(content=form.content.data, post_id=post.id, user_comment=current_user)
+        db.session.add(comment)
+        db.session.commit()
+        return redirect(url_for('post', post_id=post.id))
+    return render_template('comment.html', form=form, legend='Add a comment')
