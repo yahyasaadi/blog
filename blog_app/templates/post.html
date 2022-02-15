@@ -9,7 +9,7 @@
                 {% if post.author == current_user %}
                     <div>
                         <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('update_post', post_id=post.id) }}">Update</a>
-                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        <button type="button" class="btn btn-primary mt-1 mb-1" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
                           Delete
                         </button>
                     </div>
@@ -19,12 +19,23 @@
             <p class="article-content">{{ post.content }}</p>
         </div>
     </article>
+    <article class="comment-section">
+      <!-- Comments -->
+      <h3>Comments Section</h3>
+      <div class="comments">
+        {% for comment in post.comments %}
+          <div class="comment mt-3">
+            {{ comment.content }} {{ comment.date_posted.strftime('%Y-%m-%d') }}
+          </div>
+        {% endfor %}
+      </div>
+    </article>
     <!-- Modal -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="staticBackdropLabel">Delete Post</h5>
+            <h5 class="modal-title" id="staticBackdropLabel">Delete Post?</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-footer">
